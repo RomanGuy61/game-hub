@@ -4,238 +4,300 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RomanGuy Games Network</title>
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
-
+<meta name="description" content="Enter the RomanGuy Games Network — futuristic hub of indie game experiments." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
 <style>
-:root{
-  --bg:oklch(0.13 0.04 270);
-  --fg:oklch(0.98 0.01 200);
-  --muted:oklch(0.7 0.05 250);
-  --border:oklch(0.3 0.08 270);
-}
+  :root{
+    --bg:oklch(0.13 0.04 270);
+    --fg:oklch(0.98 0.01 200);
+    --card:oklch(0.18 0.05 270 / 0.4);
+    --muted:oklch(0.7 0.05 250);
+    --border:oklch(0.3 0.08 270);
+    --primary:oklch(0.78 0.22 180);
+    --accent:oklch(0.7 0.3 330);
+  }
+  *{box-sizing:border-box;border-color:var(--border);margin:0;padding:0}
+  html,body{overflow-x:hidden}
+  body{
+    background:var(--bg);color:var(--fg);
+    font-family:'Rajdhani',system-ui,sans-serif;
+    min-height:100vh;
+  }
+  h1,h2,h3{font-family:'Orbitron',sans-serif;letter-spacing:.02em}
+  a{color:inherit;text-decoration:none}
+  button{font:inherit;color:inherit;background:none;border:none;cursor:pointer}
 
-*{box-sizing:border-box;margin:0;padding:0}
+  /* Animated bg */
+  .grid-bg{
+    position:fixed;inset:0;opacity:.6;pointer-events:none;
+    background-image:
+      linear-gradient(oklch(0.78 0.22 180 / 0.08) 1px,transparent 1px),
+      linear-gradient(90deg,oklch(0.78 0.22 180 / 0.08) 1px,transparent 1px);
+    background-size:50px 50px;
+    animation:grid 20s linear infinite;
+  }
+  .glow-bg{position:fixed;inset:0;transition:background .7s;pointer-events:none}
+  .vignette{position:fixed;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,transparent 50%,var(--bg))}
+  @keyframes grid{to{background-position:50px 50px}}
+  @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
+  @keyframes pulseGlow{
+    0%,100%{box-shadow:0 0 30px oklch(0.78 0.22 180 / .4),0 0 60px oklch(0.7 0.3 330 / .2)}
+    50%{box-shadow:0 0 50px oklch(0.78 0.22 180 / .7),0 0 100px oklch(0.7 0.3 330 / .4)}
+  }
+  @keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(400%)}}
+  @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 
-body{
-  background:var(--bg);
-  color:var(--fg);
-  font-family:'Rajdhani',system-ui;
-  min-height:100vh;
-  overflow-x:hidden;
-}
+  .glow-text{text-shadow:0 0 20px oklch(0.78 0.22 180 / .8),0 0 40px oklch(0.7 0.3 330 / .4)}
+  .fade-up{animation:fadeUp .6s ease-out both}
 
-a{color:inherit;text-decoration:none}
+  /* Layout */
+  .wrap{position:relative;z-index:10;max-width:1200px;margin:0 auto;padding:24px 16px}
+  @media(min-width:768px){.wrap{padding:40px 24px}}
 
-.wrap{
-  max-width:1200px;
-  margin:auto;
-  padding:24px;
-}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px}
+  @media(min-width:768px){header{margin-bottom:56px}}
+  .logo{display:flex;align-items:center;gap:12px}
+  .logo-mark{
+    height:40px;width:40px;border-radius:6px;
+    border:1px solid oklch(0.78 0.22 180 / .5);
+    display:flex;align-items:center;justify-content:center;
+    animation:pulseGlow 2.5s ease-in-out infinite;
+    font-family:'Orbitron';font-weight:900;color:var(--primary);font-size:20px
+  }
+  .logo-text small{font-family:'Orbitron';font-size:10px;letter-spacing:.3em;color:var(--muted);display:block}
+  .logo-text strong{font-family:'Orbitron';font-size:16px;font-weight:700}
+  @media(min-width:768px){.logo-text strong{font-size:18px}}
+  .header-link{
+    display:none;align-items:center;gap:8px;font-family:'Orbitron';font-size:11px;letter-spacing:.2em;
+    border:1px solid var(--border);padding:8px 12px;border-radius:6px;transition:.2s
+  }
+  @media(min-width:640px){.header-link{display:inline-flex}}
+  .header-link:hover{border-color:var(--primary);color:var(--primary)}
 
-.stage{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:24px;
-  margin-top:40px;
-}
+  .preheader{font-family:'Orbitron';font-size:10px;letter-spacing:.5em;color:var(--primary);margin-bottom:12px}
+  @media(min-width:768px){.preheader{font-size:12px}}
+  h1{font-size:40px;font-weight:900;line-height:.95}
+  @media(min-width:640px){h1{font-size:60px}}
+  @media(min-width:768px){h1{font-size:72px}}
+  #title-color{transition:color .5s}
 
-/* FEATURE */
-.feature{
-  border:1px solid var(--border);
-  border-radius:16px;
-  padding:24px;
-  min-height:380px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  background:oklch(0.18 0.05 270 / 0.4);
-}
+  .stage{display:grid;grid-template-columns:1fr;gap:24px;margin-top:40px}
+  @media(min-width:1024px){.stage{grid-template-columns:1.2fr 1fr;margin-top:56px}}
 
-.btn{
-  display:inline-block;
-  padding:12px 16px;
-  font-weight:700;
-  border-radius:6px;
-}
+  .feature{
+    position:relative;overflow:hidden;border-radius:16px;border:1px solid;
+    background:var(--card);backdrop-filter:blur(8px);
+    padding:24px;min-height:380px;
+    display:flex;flex-direction:column;justify-content:space-between;
+    transition:border-color .5s
+  }
+  @media(min-width:768px){.feature{padding:40px}}
+  .scanline{position:absolute;left:0;right:0;top:0;height:30%;
+    background:linear-gradient(180deg,transparent,oklch(0.78 0.22 180 / .15),transparent);
+    animation:scan 3s linear infinite;pointer-events:none}
+  .bracket{position:absolute;height:16px;width:16px;border-color:inherit}
+  .br-tl{top:12px;left:12px;border-top:2px solid;border-left:2px solid}
+  .br-tr{top:12px;right:12px;border-top:2px solid;border-right:2px solid}
+  .br-bl{bottom:12px;left:12px;border-bottom:2px solid;border-left:2px solid}
+  .br-br{bottom:12px;right:12px;border-bottom:2px solid;border-right:2px solid}
 
-/* CATALOG */
-.catalog{
-  display:flex;
-  flex-direction:column;
-  gap:12px;
-}
+  .tag-row{display:flex;align-items:center;gap:12px;margin-bottom:24px}
+  .tag{font-family:'Orbitron';font-size:11px;letter-spacing:.3em;padding:4px 8px;border-radius:4px;border:1px solid}
+  .node-id{font-family:'Orbitron';font-size:11px;letter-spacing:.2em;color:var(--muted)}
 
-.card{
-  border:1px solid var(--border);
-  padding:16px;
-  border-radius:8px;
-  background:oklch(0.18 0.05 270 / 0.3);
-  display:block;
-  transition:.2s;
-}
+  .glyph{font-size:80px;animation:float 6s ease-in-out infinite;display:inline-block;margin-bottom:16px;line-height:1}
+  @media(min-width:768px){.glyph{font-size:120px}}
 
-.card-inner{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
+  .feature h2{font-size:28px;font-weight:900;margin-bottom:8px}
+  @media(min-width:768px){.feature h2{font-size:44px}}
+  .feature p{color:var(--muted);font-size:16px}
+  @media(min-width:768px){.feature p{font-size:18px}}
 
-.icon{
-  width:48px;
-  height:48px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid;
-  border-radius:6px;
-}
+  .actions{position:relative;margin-top:32px;display:flex;flex-direction:column;gap:12px}
+  @media(min-width:640px){.actions{flex-direction:row}}
+  .btn{font-family:'Orbitron';font-weight:700;letter-spacing:.2em;font-size:13px;
+    padding:16px 24px;border-radius:6px;transition:transform .15s;text-align:center;display:inline-block}
+  .btn:hover{transform:scale(1.02)}
+  .btn:active{transform:scale(.98)}
+  .btn-primary{color:oklch(0.1 0.03 270)}
+  .btn-ghost{border:1px solid var(--border);transition:.2s}
+  .btn-ghost:hover{border-color:var(--primary);color:var(--primary);transform:none}
 
-.meta{font-size:10px;letter-spacing:.2em;color:var(--muted)}
+  /* Catalog */
+  .catalog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+  .catalog-head small{font-family:'Orbitron';font-size:11px;letter-spacing:.3em;color:var(--muted)}
+  .hint{display:none}
+  @media(min-width:768px){.hint{display:block;font-size:10px}}
+  .catalog{display:flex;flex-direction:column;gap:12px}
+  .card{
+    position:relative;overflow:hidden;border-radius:8px;border:1px solid var(--border);
+    background:oklch(0.18 0.05 270 / 0.3);backdrop-filter:blur(4px);padding:16px;
+    text-align:left;width:100%;transition:.2s;display:block
+  }
+  .card:hover{transform:translateX(4px)}
+  .card-inner{display:flex;align-items:center;gap:16px}
+  .icon{
+    flex-shrink:0;height:48px;width:48px;border-radius:6px;border:1px solid;
+    display:flex;align-items:center;justify-content:center;font-size:24px;
+    transition:transform .2s
+  }
+  .card:hover .icon{transform:rotate(12deg)}
+  .meta{display:flex;align-items:center;gap:8px;font-family:'Orbitron';font-size:10px;letter-spacing:.2em}
+  .meta .sep,.meta .num{color:var(--muted)}
+  .card-title{font-family:'Orbitron';font-weight:700;font-size:16px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  @media(min-width:768px){.card-title{font-size:18px}}
+  .arrow{font-family:'Orbitron';font-size:20px;transition:.2s;opacity:.3;transform:translateX(-8px)}
+  .card.active .arrow{opacity:1;transform:translateX(0)}
+  .card.active::after{
+    content:"";position:absolute;left:0;bottom:0;height:2px;width:100%;
+    background:linear-gradient(90deg,transparent,currentColor,transparent)
+  }
+  .card-body{min-width:0;flex:1}
 
-.card-title{font-weight:700}
-
-.arrow{opacity:.6}
-
+  footer{margin-top:64px;padding-top:24px;border-top:1px solid var(--border);
+    display:flex;flex-direction:column;align-items:center;justify-content:space-between;gap:12px;
+    font-family:'Orbitron';font-size:11px;letter-spacing:.2em;color:var(--muted)}
+  @media(min-width:640px){footer{flex-direction:row}}
+  .dot{height:8px;width:8px;border-radius:50%;background:var(--primary);animation:pulse 2s ease-in-out infinite;display:inline-block;margin-right:8px;vertical-align:middle}
 </style>
 </head>
-
 <body>
 
+<div class="grid-bg"></div>
+<div class="glow-bg" id="glow"></div>
+<div class="vignette"></div>
+
 <div class="wrap">
+  <header>
+    <div class="logo">
+      <div class="logo-mark">R</div>
+      <div class="logo-text">
+        <small>ROMANGUY//</small>
+        <strong>GAMES NETWORK</strong>
+      </div>
+    </div>
+    <a class="header-link" href="https://romanguy-games.itch.io/" target="_blank" rel="noreferrer">ITCH.IO ↗</a>
+  </header>
 
-<div class="stage">
-
-<!-- FEATURE -->
-<div class="feature" id="feature">
-
-  <div>
-    <div id="f-tag"></div>
-    <div id="f-node" style="font-size:12px;color:var(--muted)"></div>
-    <div id="f-glyph" style="font-size:80px"></div>
-    <h2 id="f-title"></h2>
-    <p id="f-tagline" style="color:var(--muted)"></p>
+  <div class="fade-up">
+    <p class="preheader" id="sys-line">// SYSTEM ONLINE</p>
+    <h1>SELECT YOUR<br><span id="title-color">GAME.EXE</span></h1>
   </div>
 
-  <a class="btn" id="f-launch" target="_blank">PLAY</a>
-
-</div>
-
-<!-- CATALOG -->
-<div class="catalog" id="catalog"></div>
-
-</div>
-</div>
-
-<!-- IMPORTANT: your config -->
-<script src="games.config.js"></script>
-
-<script>
-document.addEventListener("DOMContentLoaded", () => {
-
-  /* ================= SAFE LOAD ================= */
-  const GAMES = window.GAMES;
-
-  if (!Array.isArray(GAMES) || GAMES.length === 0) {
-    document.body.innerHTML =
-      "<div style='color:white;padding:30px;font-family:monospace'>ERROR: games.config.js not loaded or empty</div>";
-    return;
-  }
-
-  let active = 0;
-
-  const catalog = document.getElementById("catalog");
-  const glow = document.getElementById("glow");
-
-  function withAlpha(c,a){
-    return c.replace(/\)\s*$/, ` / ${a})`);
-  }
-
-  /* ================= CATALOG ================= */
-  function renderCatalog(){
-
-    catalog.innerHTML = "";
-
-    GAMES.forEach((g,i)=>{
-
-      const card = document.createElement("a");
-
-      card.href = "#";
-      card.className = "card";
-
-      card.innerHTML = `
-        <div class="card-inner">
-
-          <div class="icon" style="color:${g.color};border-color:${g.color}">
-            ${g.glyph}
-          </div>
-
-          <div>
-            <div class="meta" style="color:${g.color}">
-              ${g.tag} · ${i+1}
-            </div>
-
-            <div class="card-title">${g.title}</div>
-          </div>
-
-          <div class="arrow">→</div>
-
+  <section class="stage">
+    <div class="feature fade-up" id="feature">
+      <div class="scanline"></div>
+      <span class="bracket br-tl"></span><span class="bracket br-tr"></span>
+      <span class="bracket br-bl"></span><span class="bracket br-br"></span>
+      <div>
+        <div class="tag-row">
+          <span class="tag" id="f-tag"></span>
+          <span class="node-id" id="f-node"></span>
         </div>
-      `;
+        <div class="glyph" id="f-glyph"></div>
+        <h2 id="f-title"></h2>
+        <p id="f-tagline"></p>
+      </div>
+      <div class="actions">
+        <a class="btn btn-primary" id="f-launch" target="_blank" rel="noreferrer">▶ LAUNCH GAME</a>
+        <a class="btn btn-ghost" id="f-itch" target="_blank" rel="noreferrer">VIEW ON ITCH.IO ↗</a>
+      </div>
+    </div>
 
-      /* CLICK ONLY (NO HOVER LOGIC ANYWHERE) */
-      card.addEventListener("click",(e)=>{
-        e.preventDefault();
-        setActive(i);
-      });
+    <div>
+      <div class="catalog-head">
+        <small>// CATALOG</small>
+        <small class="hint">[↑↓] NAVIGATE · [↵] LAUNCH</small>
+      </div>
+      <div class="catalog" id="catalog"></div>
+    </div>
+  </section>
 
-      catalog.appendChild(card);
+  <footer>
+    <div>© ROMANGUY-GAMES · NETWORK v1.0</div>
+    <div><span class="dot"></span>CONNECTION STABLE</div>
+  </footer>
+</div>
 
-    });
-  }
+<script src="games.config.js"></script>
+<script>
+/* GAMES are defined in games.config.js (loaded above) */
+const GAMES = window.GAMES;
 
-  /* ================= FEATURE ================= */
-  function renderFeature(){
+/* ====== Renderer (no need to edit below) ====== */
+let active = 0;
+const catalog = document.getElementById('catalog');
+const glow = document.getElementById('glow');
 
-    const g = GAMES[active];
-    if(!g) return;
+function withAlpha(c, a){ return c.replace(/\)\s*$/, ` / ${a})`); }
 
-    document.getElementById("f-tag").textContent = g.tag;
-    document.getElementById("f-node").textContent =
-      `NODE ${active+1} / ${GAMES.length}`;
-
-    document.getElementById("f-glyph").textContent = g.glyph;
-    document.getElementById("f-title").textContent = g.title;
-    document.getElementById("f-tagline").textContent = g.tagline;
-
-    const launch = document.getElementById("f-launch");
-    launch.href = g.url;
-    launch.style.background = g.color;
-    launch.style.color = "black";
-
-  }
-
-  /* ================= STATE ================= */
-  function setActive(i){
-    active = (i + GAMES.length) % GAMES.length;
-    renderCatalog();
-    renderFeature();
-  }
-
-  /* keyboard */
-  document.addEventListener("keydown",(e)=>{
-    if(e.key==="ArrowDown"||e.key==="ArrowRight") setActive(active+1);
-    if(e.key==="ArrowUp"||e.key==="ArrowLeft") setActive(active-1);
-    if(e.key==="Enter") window.open(GAMES[active].url,"_blank");
+function renderCatalog(){
+  catalog.innerHTML = '';
+  GAMES.forEach((g, i) => {
+    const a = document.createElement('a');
+    a.href = g.url; a.target = '_blank'; a.rel = 'noreferrer';
+    a.className = 'card' + (i===active?' active':'');
+    a.style.color = g.color;
+    a.style.borderColor = i===active ? g.color : 'var(--border)';
+    a.style.boxShadow = i===active ? `0 0 25px ${withAlpha(g.color,0.3)}` : 'none';
+    a.innerHTML = `
+      <div class="card-inner">
+        <div class="icon" style="border-color:${withAlpha(g.color,0.6)};color:${g.color};background:${i===active?withAlpha(g.color,0.1):'transparent'}">${g.glyph}</div>
+        <div class="card-body">
+          <div class="meta"><span style="color:${g.color}">${g.tag}</span><span class="sep">·</span><span class="num">0${i+1}</span></div>
+          <div class="card-title" style="color:var(--fg)">${g.title}</div>
+        </div>
+        <span class="arrow" style="color:${i===active?g.color:'var(--muted)'}">→</span>
+      </div>`;
+    a.addEventListener('click', ()=>{ setActive(i); });
+    a.addEventListener('click', (e)=>{ /* still navigates via href */ });
+    catalog.appendChild(a);
   });
+}
 
-  /* START */
-  setActive(0);
+function renderFeature(){
+  const g = GAMES[active];
+  const f = document.getElementById('feature');
+  f.style.borderColor = withAlpha(g.color,0.5);
+  document.getElementById('f-tag').textContent = g.tag;
+  document.getElementById('f-tag').style.color = g.color;
+  document.getElementById('f-tag').style.borderColor = withAlpha(g.color,0.5);
+  document.getElementById('f-node').textContent = `NODE_${String(active+1).padStart(2,'0')}/${String(GAMES.length).padStart(2,'0')}`;
+  const glyph = document.getElementById('f-glyph');
+  glyph.textContent = g.glyph;
+  glyph.style.color = g.color;
+  glyph.style.textShadow = `0 0 40px ${withAlpha(g.color,0.8)}`;
+  document.getElementById('f-title').textContent = g.title;
+  document.getElementById('f-tagline').textContent = g.tagline;
+  const launch = document.getElementById('f-launch');
+  launch.href = g.url;
+  launch.style.background = g.color;
+  launch.style.boxShadow = `0 0 30px ${withAlpha(g.color,0.5)}`;
+  document.getElementById('f-itch').href = g.url;
+  document.getElementById('title-color').style.color = g.color;
+  document.getElementById('sys-line').textContent = `// SYSTEM ONLINE — ${GAMES.length} NODES DETECTED`;
+  glow.style.background = `radial-gradient(ellipse at 50% 30%, ${withAlpha(g.color,0.25)} 0%, transparent 60%), radial-gradient(ellipse at 80% 80%, oklch(0.7 0.3 330 / 0.15) 0%, transparent 50%)`;
+  // re-trigger fade
+  f.style.animation='none'; void f.offsetWidth; f.style.animation='';
+}
 
+function setActive(i){
+  active = (i + GAMES.length) % GAMES.length;
+  renderCatalog();
+  renderFeature();
+}
+
+document.addEventListener('keydown', (e)=>{
+  if(e.key==='ArrowRight'||e.key==='ArrowDown') setActive(active+1);
+  if(e.key==='ArrowLeft'||e.key==='ArrowUp') setActive(active-1);
+  if(e.key==='Enter') window.open(GAMES[active].url,'_blank');
 });
-</script>
 
+setActive(0);
+</script>
 </body>
 </html>
