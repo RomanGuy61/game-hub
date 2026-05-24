@@ -1,18 +1,19 @@
 <script src="games.config.js"></script>
-<script>
-/* GAMES are defined in games.config.js (loaded above) */
-const GAMES = window.GAMES;
 
-/* ====== Renderer ====== */
+<script>
+/* GAMES are defined in games.config.js */
+const GAMES = window.GAMES || [];
+
 let active = 0;
+
 const catalog = document.getElementById('catalog');
 const glow = document.getElementById('glow');
 
-function withAlpha(c, a){
-  return c.replace(/\)\s*$/, ` / ${a})`);
+function withAlpha(color, alpha) {
+  return color.replace(/\)\s*$/, ` / ${alpha})`);
 }
 
-function renderCatalog(){
+function renderCatalog() {
 
   catalog.innerHTML = '';
 
@@ -20,20 +21,20 @@ function renderCatalog(){
 
     const a = document.createElement('a');
 
-    /* keep links working */
     a.href = '#';
 
-    a.className =
-      'card' + (i === active ? ' active' : '');
+    a.className = 'card' + (i === active ? ' active' : '');
 
     a.style.color = g.color;
 
     a.style.borderColor =
-      i === active ? g.color : 'var(--border)';
+      i === active
+        ? g.color
+        : 'var(--border)';
 
     a.style.boxShadow =
       i === active
-        ? `0 0 25px ${withAlpha(g.color,0.3)}`
+        ? `0 0 25px ${withAlpha(g.color, 0.3)}`
         : 'none';
 
     a.innerHTML = `
@@ -42,9 +43,11 @@ function renderCatalog(){
         <div
           class="icon"
           style="
-            border-color:${withAlpha(g.color,0.6)};
+            border-color:${withAlpha(g.color, 0.6)};
             color:${g.color};
-            background:${i===active ? withAlpha(g.color,0.1) : 'transparent'}
+            background:${i === active
+              ? withAlpha(g.color, 0.1)
+              : 'transparent'};
           "
         >
           ${g.glyph}
@@ -60,7 +63,7 @@ function renderCatalog(){
             <span class="sep">·</span>
 
             <span class="num">
-              0${i + 1}
+              ${String(i + 1).padStart(2, '0')}
             </span>
           </div>
 
@@ -76,10 +79,9 @@ function renderCatalog(){
         <span
           class="arrow"
           style="
-            color:${i===active
+            color:${i === active
               ? g.color
-              : 'var(--muted)'
-            }
+              : 'var(--muted)'};
           "
         >
           →
@@ -88,7 +90,7 @@ function renderCatalog(){
       </div>
     `;
 
-    /* CLICK changes active game */
+    /* CLICK ONLY */
     a.addEventListener('click', (e) => {
 
       e.preventDefault();
@@ -102,23 +104,29 @@ function renderCatalog(){
   });
 
 }
-function renderFeature(){
+
+function renderFeature() {
 
   const g = GAMES[active];
 
-  const f = document.getElementById('feature');
+  if (!g) return;
 
-  f.style.borderColor = withAlpha(g.color,0.5);
+  const feature = document.getElementById('feature');
 
-  document.getElementById('f-tag').textContent = g.tag;
+  feature.style.borderColor =
+    withAlpha(g.color, 0.5);
 
-  document.getElementById('f-tag').style.color = g.color;
+  const tag = document.getElementById('f-tag');
 
-  document.getElementById('f-tag').style.borderColor =
-    withAlpha(g.color,0.5);
+  tag.textContent = g.tag;
+
+  tag.style.color = g.color;
+
+  tag.style.borderColor =
+    withAlpha(g.color, 0.5);
 
   document.getElementById('f-node').textContent =
-    `NODE_${String(active+1).padStart(2,'0')}/${String(GAMES.length).padStart(2,'0')}`;
+    `NODE_${String(active + 1).padStart(2, '0')}/${String(GAMES.length).padStart(2, '0')}`;
 
   const glyph = document.getElementById('f-glyph');
 
@@ -127,7 +135,7 @@ function renderFeature(){
   glyph.style.color = g.color;
 
   glyph.style.textShadow =
-    `0 0 40px ${withAlpha(g.color,0.8)}`;
+    `0 0 40px ${withAlpha(g.color, 0.8)}`;
 
   document.getElementById('f-title').textContent =
     g.title;
@@ -135,16 +143,18 @@ function renderFeature(){
   document.getElementById('f-tagline').textContent =
     g.tagline;
 
-  const launch = document.getElementById('f-launch');
+  const launch =
+    document.getElementById('f-launch');
 
   launch.href = g.url;
 
   launch.style.background = g.color;
 
   launch.style.boxShadow =
-    `0 0 30px ${withAlpha(g.color,0.5)}`;
+    `0 0 30px ${withAlpha(g.color, 0.5)}`;
 
-  document.getElementById('f-itch').href = g.url;
+  document.getElementById('f-itch').href =
+    g.url;
 
   document.getElementById('title-color').style.color =
     g.color;
@@ -155,7 +165,7 @@ function renderFeature(){
   glow.style.background = `
     radial-gradient(
       ellipse at 50% 30%,
-      ${withAlpha(g.color,0.25)} 0%,
+      ${withAlpha(g.color, 0.25)} 0%,
       transparent 60%
     ),
     radial-gradient(
@@ -166,42 +176,54 @@ function renderFeature(){
   `;
 
   /* retrigger animation */
-  f.style.animation = 'none';
-  void f.offsetWidth;
-  f.style.animation = '';
+  feature.style.animation = 'none';
+
+  void feature.offsetWidth;
+
+  feature.style.animation = '';
+
 }
 
-function setActive(i){
+function setActive(i) {
 
-  active = (i + GAMES.length) % GAMES.length;
+  active =
+    (i + GAMES.length) % GAMES.length;
 
   renderCatalog();
 
   renderFeature();
+
 }
 
 /* Keyboard controls */
-document.addEventListener('keydown', (e)=>{
+document.addEventListener('keydown', (e) => {
 
-  if(
+  if (
     e.key === 'ArrowRight' ||
     e.key === 'ArrowDown'
-  ){
+  ) {
     setActive(active + 1);
   }
 
-  if(
+  if (
     e.key === 'ArrowLeft' ||
     e.key === 'ArrowUp'
-  ){
+  ) {
     setActive(active - 1);
   }
 
-  if(e.key === 'Enter'){
-    window.open(GAMES[active].url, '_blank');
+  if (e.key === 'Enter') {
+
+    window.open(
+      GAMES[active].url,
+      '_blank'
+    );
+
   }
+
 });
 
-/* Initial render */
+/* Start */
 setActive(0);
+
 </script>
