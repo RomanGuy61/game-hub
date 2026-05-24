@@ -29,7 +29,7 @@ window.GAMES = [
     glyph: "✦",
   },
   {
-    title: "Big Goofy Project Plus",
+    title: "Big Goofy Project Plus [WEBGL PORT]",
     tagline: "WebGL Port — play in browser",
     url: "https://romanguy-games.itch.io/bgppwp",
     tag: "WEBGL",
@@ -37,7 +37,7 @@ window.GAMES = [
     glyph: "◈",
   },
   {
-    title: "BGP+ [DEMO]",
+    title: "BGP+ Full Game [DEMO]",
     tagline: "Big Goofy Project Plus — demo build",
     url: "https://romanguy-games.itch.io/big-goofy-project-plus",
     tag: "DEMO",
@@ -51,13 +51,5 @@ window.GAMES = [
     tag: "ARCHIVE",
     color: "oklch(0.65 0.25 30)",
     glyph: "❖",
-  },
-  {
-    title: "BGP Textures/Images",
-    tagline: "Asset pack from the BGP universe",
-    url: "https://romanguy-games.itch.io/bgppp",
-    tag: "ASSETS",
-    color: "oklch(0.75 0.25 140)",
-    glyph: "◐",
   },
 ];
