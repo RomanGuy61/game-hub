@@ -1,229 +1,132 @@
 <script src="games.config.js"></script>
 
 <script>
-/* GAMES are defined in games.config.js */
-const GAMES = window.GAMES || [];
+document.addEventListener('DOMContentLoaded', () => {
 
-let active = 0;
+  const GAMES = window.GAMES || [];
 
-const catalog = document.getElementById('catalog');
-const glow = document.getElementById('glow');
+  const catalog = document.getElementById('catalog');
+  const glow = document.getElementById('glow');
 
-function withAlpha(color, alpha) {
-  return color.replace(/\)\s*$/, ` / ${alpha})`);
-}
+  let active = 0;
 
-function renderCatalog() {
+  function withAlpha(color, alpha) {
+    if (!color) return 'transparent';
+    return color.replace(/\)\s*$/, ` / ${alpha})`);
+  }
 
-  catalog.innerHTML = '';
+  /* If config didn't load */
+  if (!Array.isArray(GAMES) || GAMES.length === 0) {
+    console.error("GAMES is missing or empty. Check games.config.js");
+    catalog.innerHTML = "<div style='color:white;padding:20px'>No games loaded (check games.config.js)</div>";
+    return;
+  }
 
-  GAMES.forEach((g, i) => {
+  function renderCatalog() {
+    catalog.innerHTML = '';
 
-    const a = document.createElement('a');
+    GAMES.forEach((g, i) => {
 
-    a.href = '#';
+      const a = document.createElement('a');
 
-    a.className = 'card' + (i === active ? ' active' : '');
+      a.href = '#';
+      a.className = 'card' + (i === active ? ' active' : '');
 
-    a.style.color = g.color;
-
-    a.style.borderColor =
-      i === active
-        ? g.color
-        : 'var(--border)';
-
-    a.style.boxShadow =
-      i === active
+      a.style.color = g.color || 'white';
+      a.style.borderColor = i === active ? g.color : 'var(--border)';
+      a.style.boxShadow = i === active
         ? `0 0 25px ${withAlpha(g.color, 0.3)}`
         : 'none';
 
-    a.innerHTML = `
-      <div class="card-inner">
+      a.innerHTML = `
+        <div class="card-inner">
 
-        <div
-          class="icon"
-          style="
-            border-color:${withAlpha(g.color, 0.6)};
-            color:${g.color};
-            background:${i === active
-              ? withAlpha(g.color, 0.1)
-              : 'transparent'};
-          "
-        >
-          ${g.glyph}
-        </div>
-
-        <div class="card-body">
-
-          <div class="meta">
-            <span style="color:${g.color}">
-              ${g.tag}
-            </span>
-
-            <span class="sep">·</span>
-
-            <span class="num">
-              ${String(i + 1).padStart(2, '0')}
-            </span>
+          <div class="icon"
+            style="
+              border-color:${withAlpha(g.color, 0.6)};
+              color:${g.color};
+              background:${i===active ? withAlpha(g.color,0.1) : 'transparent'}
+            ">
+            ${g.glyph || "?"}
           </div>
 
-          <div
-            class="card-title"
-            style="color:var(--fg)"
-          >
-            ${g.title}
+          <div class="card-body">
+            <div class="meta">
+              <span style="color:${g.color}">${g.tag || ""}</span>
+              <span class="sep">·</span>
+              <span class="num">0${i+1}</span>
+            </div>
+
+            <div class="card-title" style="color:var(--fg)">
+              ${g.title || "Untitled"}
+            </div>
           </div>
 
+          <span class="arrow"
+            style="color:${i===active ? g.color : 'var(--muted)'}">
+            →
+          </span>
+
         </div>
+      `;
 
-        <span
-          class="arrow"
-          style="
-            color:${i === active
-              ? g.color
-              : 'var(--muted)'};
-          "
-        >
-          →
-        </span>
+      /* CLICK ONLY */
+      a.addEventListener('click', (e) => {
+        e.preventDefault();
+        setActive(i);
+      });
 
-      </div>
+      catalog.appendChild(a);
+    });
+  }
+
+  function renderFeature() {
+
+    const g = GAMES[active];
+    if (!g) return;
+
+    const feature = document.getElementById('feature');
+
+    feature.style.borderColor = withAlpha(g.color, 0.5);
+
+    document.getElementById('f-tag').textContent = g.tag || "";
+    document.getElementById('f-tag').style.color = g.color;
+
+    document.getElementById('f-node').textContent =
+      `NODE_${String(active+1).padStart(2,'0')}/${String(GAMES.length).padStart(2,'0')}`;
+
+    const glyph = document.getElementById('f-glyph');
+    glyph.textContent = g.glyph || "?";
+    glyph.style.color = g.color;
+
+    document.getElementById('f-title').textContent = g.title || "";
+    document.getElementById('f-tagline').textContent = g.tagline || "";
+
+    document.getElementById('f-launch').href = g.url || "#";
+    document.getElementById('f-itch').href = g.url || "#";
+
+    document.getElementById('title-color').style.color = g.color;
+
+    glow.style.background = `
+      radial-gradient(ellipse at 50% 30%, ${withAlpha(g.color,0.25)} 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, oklch(0.7 0.3 330 / 0.15) 0%, transparent 50%)
     `;
 
-    /* CLICK ONLY */
-    a.addEventListener('click', (e) => {
+  }
 
-      e.preventDefault();
+  function setActive(i) {
+    active = (i + GAMES.length) % GAMES.length;
+    renderCatalog();
+    renderFeature();
+  }
 
-      setActive(i);
-
-    });
-
-    catalog.appendChild(a);
-
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'ArrowRight' || e.key === 'ArrowDown') setActive(active + 1);
+    if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') setActive(active - 1);
+    if (e.key === 'Enter') window.open(GAMES[active].url, '_blank');
   });
 
-}
-
-function renderFeature() {
-
-  const g = GAMES[active];
-
-  if (!g) return;
-
-  const feature = document.getElementById('feature');
-
-  feature.style.borderColor =
-    withAlpha(g.color, 0.5);
-
-  const tag = document.getElementById('f-tag');
-
-  tag.textContent = g.tag;
-
-  tag.style.color = g.color;
-
-  tag.style.borderColor =
-    withAlpha(g.color, 0.5);
-
-  document.getElementById('f-node').textContent =
-    `NODE_${String(active + 1).padStart(2, '0')}/${String(GAMES.length).padStart(2, '0')}`;
-
-  const glyph = document.getElementById('f-glyph');
-
-  glyph.textContent = g.glyph;
-
-  glyph.style.color = g.color;
-
-  glyph.style.textShadow =
-    `0 0 40px ${withAlpha(g.color, 0.8)}`;
-
-  document.getElementById('f-title').textContent =
-    g.title;
-
-  document.getElementById('f-tagline').textContent =
-    g.tagline;
-
-  const launch =
-    document.getElementById('f-launch');
-
-  launch.href = g.url;
-
-  launch.style.background = g.color;
-
-  launch.style.boxShadow =
-    `0 0 30px ${withAlpha(g.color, 0.5)}`;
-
-  document.getElementById('f-itch').href =
-    g.url;
-
-  document.getElementById('title-color').style.color =
-    g.color;
-
-  document.getElementById('sys-line').textContent =
-    `// SYSTEM ONLINE — ${GAMES.length} NODES DETECTED`;
-
-  glow.style.background = `
-    radial-gradient(
-      ellipse at 50% 30%,
-      ${withAlpha(g.color, 0.25)} 0%,
-      transparent 60%
-    ),
-    radial-gradient(
-      ellipse at 80% 80%,
-      oklch(0.7 0.3 330 / 0.15) 0%,
-      transparent 50%
-    )
-  `;
-
-  /* retrigger animation */
-  feature.style.animation = 'none';
-
-  void feature.offsetWidth;
-
-  feature.style.animation = '';
-
-}
-
-function setActive(i) {
-
-  active =
-    (i + GAMES.length) % GAMES.length;
-
-  renderCatalog();
-
-  renderFeature();
-
-}
-
-/* Keyboard controls */
-document.addEventListener('keydown', (e) => {
-
-  if (
-    e.key === 'ArrowRight' ||
-    e.key === 'ArrowDown'
-  ) {
-    setActive(active + 1);
-  }
-
-  if (
-    e.key === 'ArrowLeft' ||
-    e.key === 'ArrowUp'
-  ) {
-    setActive(active - 1);
-  }
-
-  if (e.key === 'Enter') {
-
-    window.open(
-      GAMES[active].url,
-      '_blank'
-    );
-
-  }
+  setActive(0);
 
 });
-
-/* Start */
-setActive(0);
-
 </script>
