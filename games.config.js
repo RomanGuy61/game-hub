@@ -29,7 +29,7 @@ window.GAMES = [
     glyph: "✦",
   },
   {
-    title: "Big Goofy Project Plus [WEBGL PORT]",
+    title: "BGP+ Full Game [DEMO WEBGL PORT]",
     tagline: "WebGL Port — play in browser",
     url: "https://romanguy-games.itch.io/bgppwp",
     tag: "WEBGL",
