@@ -253,7 +253,15 @@ function renderCatalog(){
         </div>
         <span class="arrow" style="color:${i===active?g.color:'var(--muted)'}">→</span>
       </div>`;
-    a.addEventListener('click', ()=>{ setActive(i); });
+a.addEventListener('mouseenter', () => {
+  if (a._locked) return;
+  a._locked = true;
+  setActive(i);
+});
+
+a.addEventListener('mouseleave', () => {
+  a._locked = false;
+});
     a.addEventListener('click', (e)=>{ /* still navigates via href */ });
     catalog.appendChild(a);
   });
