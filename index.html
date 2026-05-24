@@ -4,86 +4,105 @@
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>RomanGuy Games Network</title>
-<meta name="description" content="Enter the RomanGuy Games Network — futuristic hub of indie game experiments." />
 
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
   --bg:oklch(0.13 0.04 270);
   --fg:oklch(0.98 0.01 200);
-  --card:oklch(0.18 0.05 270 / 0.4);
   --muted:oklch(0.7 0.05 250);
   --border:oklch(0.3 0.08 270);
-  --primary:oklch(0.78 0.22 180);
-  --accent:oklch(0.7 0.3 330);
 }
+
 *{box-sizing:border-box;margin:0;padding:0}
+
 body{
   background:var(--bg);
   color:var(--fg);
-  font-family:'Rajdhani',system-ui,sans-serif;
+  font-family:'Rajdhani',system-ui;
   min-height:100vh;
+  overflow-x:hidden;
 }
+
 a{color:inherit;text-decoration:none}
 
-/* background */
-.grid-bg{
-  position:fixed;inset:0;opacity:.6;pointer-events:none;
-  background-image:
-    linear-gradient(oklch(0.78 0.22 180 / 0.08) 1px,transparent 1px),
-    linear-gradient(90deg,oklch(0.78 0.22 180 / 0.08) 1px,transparent 1px);
-  background-size:50px 50px;
+.wrap{
+  max-width:1200px;
+  margin:auto;
+  padding:24px;
 }
-.glow-bg{position:fixed;inset:0;pointer-events:none}
-.vignette{position:fixed;inset:0;pointer-events:none;background:linear-gradient(180deg,transparent 50%,var(--bg))}
 
-/* layout */
-.wrap{max-width:1200px;margin:0 auto;padding:24px;position:relative;z-index:10}
-.stage{display:grid;grid-template-columns:1.2fr 1fr;gap:24px;margin-top:40px}
+.stage{
+  display:grid;
+  grid-template-columns:1.2fr 1fr;
+  gap:24px;
+  margin-top:40px;
+}
 
+/* FEATURE */
 .feature{
   border:1px solid var(--border);
-  background:var(--card);
-  padding:24px;
   border-radius:16px;
+  padding:24px;
   min-height:380px;
   display:flex;
   flex-direction:column;
   justify-content:space-between;
+  background:oklch(0.18 0.05 270 / 0.4);
 }
 
-.catalog{display:flex;flex-direction:column;gap:12px}
+.btn{
+  display:inline-block;
+  padding:12px 16px;
+  font-weight:700;
+  border-radius:6px;
+}
+
+/* CATALOG */
+.catalog{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
 
 .card{
-  display:block;
-  padding:16px;
   border:1px solid var(--border);
+  padding:16px;
   border-radius:8px;
   background:oklch(0.18 0.05 270 / 0.3);
+  display:block;
   transition:.2s;
 }
-.card:hover{transform:translateX(4px)}
 
-.card-inner{display:flex;align-items:center;gap:16px}
-.icon{width:48px;height:48px;display:flex;align-items:center;justify-content:center;border:1px solid;border-radius:6px}
+.card-inner{
+  display:flex;
+  align-items:center;
+  gap:14px;
+}
+
+.icon{
+  width:48px;
+  height:48px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid;
+  border-radius:6px;
+}
+
+.meta{font-size:10px;letter-spacing:.2em;color:var(--muted)}
+
 .card-title{font-weight:700}
-.meta{font-size:10px;letter-spacing:.2em}
-.arrow{opacity:.5}
 
-.btn{padding:12px 16px;border-radius:6px;font-weight:700}
-.btn-primary{color:black}
-.btn-ghost{border:1px solid var(--border)}
+.arrow{opacity:.6}
+
 </style>
 </head>
 
 <body>
-
-<div class="grid-bg"></div>
-<div class="glow-bg" id="glow"></div>
-<div class="vignette"></div>
 
 <div class="wrap">
 
@@ -91,113 +110,131 @@ a{color:inherit;text-decoration:none}
 
 <!-- FEATURE -->
 <div class="feature" id="feature">
-  <div>
-    <div id="f-tag"></div>
-    <div id="f-node"></div>
-    <div id="f-glyph" style="font-size:80px"></div>
-    <h2 id="f-title"></h2>
-    <p id="f-tagline"></p>
-  </div>
 
   <div>
-    <a class="btn btn-primary" id="f-launch" target="_blank">PLAY</a>
+    <div id="f-tag"></div>
+    <div id="f-node" style="font-size:12px;color:var(--muted)"></div>
+    <div id="f-glyph" style="font-size:80px"></div>
+    <h2 id="f-title"></h2>
+    <p id="f-tagline" style="color:var(--muted)"></p>
   </div>
+
+  <a class="btn" id="f-launch" target="_blank">PLAY</a>
+
 </div>
 
 <!-- CATALOG -->
-<div>
-  <div class="catalog" id="catalog"></div>
-</div>
+<div class="catalog" id="catalog"></div>
 
 </div>
 </div>
+
+<!-- IMPORTANT: your config -->
+<script src="games.config.js"></script>
 
 <script>
-/* ===== SAFE DATA ===== */
-const GAMES = window.GAMES || [];
+document.addEventListener("DOMContentLoaded", () => {
 
-if (!Array.isArray(GAMES) || GAMES.length === 0) {
-  document.body.innerHTML =
-    "<div style='color:white;padding:40px;font-family:monospace'>ERROR: GAMES not loaded</div>";
-  throw new Error("Missing GAMES");
-}
+  /* ================= SAFE LOAD ================= */
+  const GAMES = window.GAMES;
 
-let active = 0;
+  if (!Array.isArray(GAMES) || GAMES.length === 0) {
+    document.body.innerHTML =
+      "<div style='color:white;padding:30px;font-family:monospace'>ERROR: games.config.js not loaded or empty</div>";
+    return;
+  }
 
-const catalog = document.getElementById('catalog');
-const glow = document.getElementById('glow');
+  let active = 0;
 
-function withAlpha(c,a){
-  return c.replace(/\)\s*$/, ` / ${a})`);
-}
+  const catalog = document.getElementById("catalog");
+  const glow = document.getElementById("glow");
 
-/* ===== CATALOG ===== */
-function renderCatalog(){
-  catalog.innerHTML = '';
+  function withAlpha(c,a){
+    return c.replace(/\)\s*$/, ` / ${a})`);
+  }
 
-  GAMES.forEach((g,i)=>{
-    const a = document.createElement('a');
-    a.href = '#';
-    a.className = 'card';
+  /* ================= CATALOG ================= */
+  function renderCatalog(){
 
-    a.innerHTML = `
-      <div class="card-inner">
-        <div class="icon" style="color:${g.color};border-color:${g.color}">
-          ${g.glyph}
-        </div>
-        <div>
-          <div class="meta" style="color:${g.color}">
-            ${g.tag} · ${i+1}
+    catalog.innerHTML = "";
+
+    GAMES.forEach((g,i)=>{
+
+      const card = document.createElement("a");
+
+      card.href = "#";
+      card.className = "card";
+
+      card.innerHTML = `
+        <div class="card-inner">
+
+          <div class="icon" style="color:${g.color};border-color:${g.color}">
+            ${g.glyph}
           </div>
-          <div class="card-title">${g.title}</div>
+
+          <div>
+            <div class="meta" style="color:${g.color}">
+              ${g.tag} · ${i+1}
+            </div>
+
+            <div class="card-title">${g.title}</div>
+          </div>
+
+          <div class="arrow">→</div>
+
         </div>
-        <div class="arrow">→</div>
-      </div>
-    `;
+      `;
 
-    /* CLICK ONLY */
-    a.addEventListener('click',(e)=>{
-      e.preventDefault();
-      setActive(i);
+      /* CLICK ONLY (NO HOVER LOGIC ANYWHERE) */
+      card.addEventListener("click",(e)=>{
+        e.preventDefault();
+        setActive(i);
+      });
+
+      catalog.appendChild(card);
+
     });
+  }
 
-    catalog.appendChild(a);
+  /* ================= FEATURE ================= */
+  function renderFeature(){
+
+    const g = GAMES[active];
+    if(!g) return;
+
+    document.getElementById("f-tag").textContent = g.tag;
+    document.getElementById("f-node").textContent =
+      `NODE ${active+1} / ${GAMES.length}`;
+
+    document.getElementById("f-glyph").textContent = g.glyph;
+    document.getElementById("f-title").textContent = g.title;
+    document.getElementById("f-tagline").textContent = g.tagline;
+
+    const launch = document.getElementById("f-launch");
+    launch.href = g.url;
+    launch.style.background = g.color;
+    launch.style.color = "black";
+
+  }
+
+  /* ================= STATE ================= */
+  function setActive(i){
+    active = (i + GAMES.length) % GAMES.length;
+    renderCatalog();
+    renderFeature();
+  }
+
+  /* keyboard */
+  document.addEventListener("keydown",(e)=>{
+    if(e.key==="ArrowDown"||e.key==="ArrowRight") setActive(active+1);
+    if(e.key==="ArrowUp"||e.key==="ArrowLeft") setActive(active-1);
+    if(e.key==="Enter") window.open(GAMES[active].url,"_blank");
   });
-}
 
-/* ===== FEATURE ===== */
-function renderFeature(){
-  const g = GAMES[active];
-  if(!g) return;
+  /* START */
+  setActive(0);
 
-  document.getElementById('f-tag').textContent = g.tag;
-  document.getElementById('f-node').textContent = `NODE ${active+1}`;
-  document.getElementById('f-glyph').textContent = g.glyph;
-  document.getElementById('f-title').textContent = g.title;
-  document.getElementById('f-tagline').textContent = g.tagline;
-
-  const launch = document.getElementById('f-launch');
-  launch.href = g.url;
-  launch.style.background = g.color;
-
-  glow.style.background = `radial-gradient(circle at 50% 30%, ${g.color}55, transparent 60%)`;
-}
-
-/* ===== STATE ===== */
-function setActive(i){
-  active = (i + GAMES.length) % GAMES.length;
-  renderCatalog();
-  renderFeature();
-}
-
-/* keyboard */
-document.addEventListener('keydown',(e)=>{
-  if(e.key==='ArrowDown'||e.key==='ArrowRight') setActive(active+1);
-  if(e.key==='ArrowUp'||e.key==='ArrowLeft') setActive(active-1);
 });
-
-/* start */
-setActive(0);
 </script>
 
 </body>
