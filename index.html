@@ -13,21 +13,30 @@ function withAlpha(c, a){
 }
 
 function renderCatalog(){
+
   catalog.innerHTML = '';
 
   GAMES.forEach((g, i) => {
 
-    const card = document.createElement('div');
-    card.className = 'card' + (i === active ? ' active' : '');
+    const a = document.createElement('a');
 
-    card.style.color = g.color;
-    card.style.borderColor = i === active ? g.color : 'var(--border)';
-    card.style.boxShadow =
+    /* keep links working */
+    a.href = '#';
+
+    a.className =
+      'card' + (i === active ? ' active' : '');
+
+    a.style.color = g.color;
+
+    a.style.borderColor =
+      i === active ? g.color : 'var(--border)';
+
+    a.style.boxShadow =
       i === active
         ? `0 0 25px ${withAlpha(g.color,0.3)}`
         : 'none';
 
-    card.innerHTML = `
+    a.innerHTML = `
       <div class="card-inner">
 
         <div
@@ -42,6 +51,7 @@ function renderCatalog(){
         </div>
 
         <div class="card-body">
+
           <div class="meta">
             <span style="color:${g.color}">
               ${g.tag}
@@ -54,14 +64,23 @@ function renderCatalog(){
             </span>
           </div>
 
-          <div class="card-title" style="color:var(--fg)">
+          <div
+            class="card-title"
+            style="color:var(--fg)"
+          >
             ${g.title}
           </div>
+
         </div>
 
         <span
           class="arrow"
-          style="color:${i===active ? g.color : 'var(--muted)'}"
+          style="
+            color:${i===active
+              ? g.color
+              : 'var(--muted)'
+            }
+          "
         >
           →
         </span>
@@ -69,15 +88,20 @@ function renderCatalog(){
       </div>
     `;
 
-    /* CLICK ONLY */
-    card.addEventListener('click', () => {
+    /* CLICK changes active game */
+    a.addEventListener('click', (e) => {
+
+      e.preventDefault();
+
       setActive(i);
+
     });
 
-    catalog.appendChild(card);
-  });
-}
+    catalog.appendChild(a);
 
+  });
+
+}
 function renderFeature(){
 
   const g = GAMES[active];
